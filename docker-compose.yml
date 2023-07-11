@@ -1,0 +1,31 @@
+version: "2"
+services:
+    api:
+        build: .
+        container_name: api
+        command: /sbin/my_init
+        # env_file: ./.env.docker
+        environment:
+            - TERM=xterm
+        depends_on:
+            - db
+        ports:
+            - 80:80
+        volumes:
+            - ./:/code/api
+    db:
+        image: mysql:5.7
+        container_name: db
+        env_file: ./build/mysql_env
+        # environment:
+        #   - TERM=xterm
+        #   - MYSQL_ROOT_PASSWORD=root.pass
+        #   - MYSQL_PASSWORD=root.pass
+        #   - MYSQL_DATABASE=api
+        #   - MYSQL_HOSTNAME=db
+        #   - MYSQL_PORT=3306
+        ports:
+            - 3306:3306
+        volumes:
+            - ./build/performance.cnf:/etc/mysql/conf.d/performance.cnf
+            - ./data:/var/lib/mysql
