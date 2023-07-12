@@ -4,7 +4,7 @@ services:
         build: .
         container_name: api
         command: /sbin/my_init
-        # env_file: ./.env.docker
+        env_file: ./build/app.env
         environment:
             - TERM=xterm
         depends_on:
@@ -16,16 +16,12 @@ services:
     db:
         image: mysql:5.7
         container_name: db
-        env_file: ./build/mysql_env
-        # environment:
-        #   - TERM=xterm
-        #   - MYSQL_ROOT_PASSWORD=root.pass
-        #   - MYSQL_PASSWORD=root.pass
-        #   - MYSQL_DATABASE=api
-        #   - MYSQL_HOSTNAME=db
-        #   - MYSQL_PORT=3306
+        env_file: ./build/mysql.env
+        environment:
+            - TERM=xterm
         ports:
             - 3306:3306
         volumes:
-            - ./build/performance.cnf:/etc/mysql/conf.d/performance.cnf
+            # - ./build/performance.cnf:/etc/mysql/conf.d/performance.cnf
             - ./data:/var/lib/mysql
+        user: mysql

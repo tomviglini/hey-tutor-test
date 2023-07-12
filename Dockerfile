@@ -40,6 +40,7 @@ php8.2-cli \
 php8.2-fpm \
 php8.2-xml \
 php8.2-curl \
+php8.2-mbstring \
 php8.2-mysql
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get install --fix-missing -y \
@@ -75,10 +76,10 @@ ADD build/nginx.conf        /etc/nginx/nginx.conf
 
 WORKDIR /code/api
 
-# ADD .env.docker ./.env
+# ADD ./build/.app.env ./.env
 
-# ADD composer.json ./
-# ADD composer.lock ./
+ADD composer.json ./
+ADD composer.lock ./
 
 ADD . ./
 
