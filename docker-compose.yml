@@ -14,14 +14,14 @@ services:
         volumes:
             - ./:/code/api
     db:
-        image: mysql:5.7
+        image: mysql:8.0
         container_name: db
         env_file: ./build/mysql.env
         environment:
             - TERM=xterm
         ports:
             - 3306:3306
-        volumes:
-            # - ./build/performance.cnf:/etc/mysql/conf.d/performance.cnf
-            - ./data:/var/lib/mysql
-        user: mysql
+        # volumes:
+        # - ./build/performance.cnf:/etc/mysql/conf.d/performance.cnf
+        # - ./data:/var/lib/mysql
+        # user: mysql

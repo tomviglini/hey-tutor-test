@@ -20,7 +20,7 @@ class OrdersTableSeeder extends Seeder
         $faker->seed(3);
 
         $orders = [];
-        for($i = 1; $i <= 100; $i++) {
+        for($i = 1; $i <= 97; $i++) {
             for($n = 0; $n < $faker->randomDigitNotNull(); $n++) {
                 $orders[] = [
                     'user_id'  => $i,
@@ -30,6 +30,19 @@ class OrdersTableSeeder extends Seeder
                 ];
             }
         }
+
+        /* users wit all products */
+        for($i = 98; $i <= 100; $i++) {
+            for($n = 1; $n <= 100; $n++) {
+                $orders[] = [
+                    'user_id'  => $i,
+                    'product_id' => $n,
+                    'quantity' => $faker->numberBetween(1, 10),
+                    'total_amount' => $faker->randomFloat(2, 1, 50000)
+                ];
+            }
+        }
+
         Order::insert($orders);
     }
 }
