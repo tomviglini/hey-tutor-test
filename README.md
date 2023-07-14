@@ -70,6 +70,4 @@ GROUP BY
     user_id
 ORDER BY
     total DESC
-LIMIT
-    10;
 ```
