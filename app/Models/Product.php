@@ -9,19 +9,13 @@ class Product extends Model
 {
     use SoftDeletes;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'products';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
         'name', 'price',
+    ];
+
+    protected $visible = [
+        'id', 'name', 'price'
     ];
 }

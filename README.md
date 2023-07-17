@@ -71,3 +71,45 @@ GROUP BY
 ORDER BY
     total DESC
 ```
+
+## GraphQL http://localhost/graphiql
+
+```graphql
+{
+    UsersPurchasedAllproducts {
+        id
+        name
+        email
+        orders {
+            id
+            quantity
+            total_amount
+            product {
+                id
+                name
+                price
+            }
+        }
+    }
+}
+```
+
+```graphql
+{
+    UsersHighestTotalSales {
+        id
+        name
+        email
+        orders {
+            id
+            quantity
+            total_amount
+            product {
+                id
+                name
+                price
+            }
+        }
+    }
+}
+```

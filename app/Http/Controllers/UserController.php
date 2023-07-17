@@ -8,7 +8,10 @@ class UserController
 {
     public function index()
     {
-        $users = User::where('id', 1)->get();
+        // $users = User::purchasedAllProducts()->with('orders.product')->get();
+        $users = User::highestTotalSales()->with('orders.product')->get();
+
+        return $users;
 
         // Query to Retrieve Users and Their Most Expensive Order:
 
@@ -63,8 +66,5 @@ class UserController
         //     total DESC
         // LIMIT
         //     10;
-
-
-        return $users;
     }
 }
