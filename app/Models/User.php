@@ -47,6 +47,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     public function scopeHighestTotalSales($query) {
+        // IMPROVEMENT: move into queryBuilder
         $users = DB::select('
             SELECT
                 user_id, SUM(total_amount) total
