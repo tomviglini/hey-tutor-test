@@ -31,43 +31,29 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     public function scopePurchasedAllProducts($query) {
-        // IMPROVEMENT: move into queryBuilder
-        return $query->whereRaw('users.id NOT IN(
-            SELECT
-                u.id id
-            FROM
-                users u
-            JOIN
-                products p
-            LEFT JOIN
-                orders o ON o.user_id = u.id AND o.product_id = p.id
-            WHERE
-                o.id IS NULL
-        )');
+        return $query->whereNotIn('users.id', function($subQuery) {
+            $subQuery
+                ->select('users.id')
+                ->from('users')
+                ->join('products', function() {})
+                ->leftJoin('orders', function($join) {
+                    $join
+                        ->on('orders.user_id', '=', 'users.id')
+                        ->on('orders.product_id', '=', 'products.id');
+                })
+                ->whereNull('orders.id');
+        });
     }
 
     public function scopeHighestTotalSales($query) {
-        // IMPROVEMENT: move into queryBuilder
-        $users = DB::select('
-            SELECT
-                user_id, SUM(total_amount) total
-            FROM
-                orders
-            GROUP BY
-                user_id
-            ORDER BY
-                total DESC
-            LIMIT
-                10;
-        ');
+        $orderFilter = DB::table('orders')
+            ->select('user_id', DB::raw('SUM(total_amount) as total'))
+            ->groupBy('user_id')
+            ->orderBy('total', 'DESC')
+            ->limit(1);
 
-        $ids = [];
-
-        foreach($users as $user) {
-            $ids[] = $user->user_id;
-        }
-
-        $query->whereIn('id', $ids);
-        return $query;
+        return $query->joinSub($orderFilter, 'orders', function($join) {
+            $join->on('users.id', '=', 'orders.user_id');
+        });
     }
 }

@@ -4,7 +4,7 @@ scalar DateTime
 
 type Query {
     UsersPurchasedAllproducts: [User!]!
-    UsersHighestTotalSales: [User!]!
+    UserHighestTotalSales: User!
 }
 
 type User {

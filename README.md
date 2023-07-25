@@ -33,7 +33,7 @@ INNER JOIN LATERAL (
     ORDER BY
         o.total_amount DESC
     LIMIT
-        5
+        1
 ) o
 ```
 
@@ -59,17 +59,28 @@ WHERE
 )
 ```
 
-## Query to Retrieve Users with Highest Total Sales:
+## Query to Retrieve the User with the Highest Total Sales:
 
 ```sql
 SELECT
-    user_id, SUM(total_amount) total
+    *
 FROM
-    orders
-GROUP BY
-    user_id
-ORDER BY
-    total DESC
+    users
+INNER JOIN (
+    SELECT
+        user_id,
+        SUM(total_amount) AS total
+    FROM
+        orders
+    GROUP BY
+        user_id
+    ORDER BY
+        total DESC
+    LIMIT
+        1
+) AS orders ON users.id = orders.user_id
+WHERE
+    users.deleted_at IS NULL
 ```
 
 ## GraphQL http://localhost/graphiql
@@ -96,7 +107,7 @@ ORDER BY
 
 ```graphql
 {
-    UsersHighestTotalSales {
+    UserHighestTotalSales {
         id
         name
         email
