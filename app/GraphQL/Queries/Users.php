@@ -4,7 +4,7 @@ namespace App\GraphQL\Queries;
 
 use App\Models\User;
 
-final class UserHighestTotalSales
+final class Users
 {
     /**
      * @param  null  $_
@@ -12,6 +12,6 @@ final class UserHighestTotalSales
      */
     public function __invoke($_, array $args)
     {
-        return User::highestTotalSales()->first();
+        return User::limit($args['limit'])->get();
     }
 }

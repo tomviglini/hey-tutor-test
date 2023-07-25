@@ -92,8 +92,9 @@ $app->configure('lighthouse');
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\SqlServiceProvider::class);
+// $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 $app->register(MLL\GraphiQL\GraphiQLServiceProvider::class);

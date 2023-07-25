@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Order;
+
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use SoftDeletes, Authenticatable, Authorizable, HasFactory;
@@ -29,9 +31,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany(Order::class);
     }
 
+    public function highestOrder() {
+        return $this->hasOne(Order::class)->whereIn('orders.id', function($query) {
+            $query->select('orders.id')
+                ->from('users')
+                ->joinLateral(
+                    Order::whereColumn('orders.user_id', 'users.id')
+                        ->orderBy('total_amount', 'DESC')
+                        ->limit(1),
+                    'orders'
+                );
+        });
+    }
+
     public function scopePurchasedAllProducts($query) {
-        return $query->whereNotIn('users.id', function($subQuery) {
-            $subQuery
+        return $query->whereNotIn('users.id', function($query) {
+            $query
                 ->select('users.id')
                 ->from('users')
                 ->crossJoin('products')
@@ -45,8 +60,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     public function scopeHighestTotalSales($query) {
-        $orderFilter = DB::table('orders')
-            ->select('user_id', DB::raw('SUM(total_amount) as total'))
+        $orderFilter = Order::select('user_id', DB::raw('SUM(total_amount) as total'))
             ->groupBy('user_id')
             ->orderBy('total', 'DESC')
             ->limit(1);

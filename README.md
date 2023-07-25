@@ -124,3 +124,23 @@ WHERE
     }
 }
 ```
+
+```graphql
+{
+    Users(limit: 2) {
+        id
+        name
+        email
+        highestOrder {
+            id
+            quantity
+            total_amount
+            product {
+                id
+                name
+                price
+            }
+        }
+    }
+}
+```

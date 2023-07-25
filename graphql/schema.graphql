@@ -5,13 +5,22 @@ scalar DateTime
 type Query {
     UsersPurchasedAllproducts: [User!]!
     UserHighestTotalSales: User!
+    Users(limit: Int = 1): [User!]!
 }
 
 type User {
     id: ID!
     name: String!
     email: String!
+    highestOrder: HighestOrder!
     orders: [Order!]!
+}
+
+type HighestOrder {
+    id: ID!
+    quantity: Int!
+    total_amount: Float!
+    product: Product!
 }
 
 type Order {
