@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Lumen\Auth\Authorizable;
-use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
@@ -23,7 +22,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     protected $visible = [
-        'id', 'name', 'email', 'orders'
+        'id', 'name', 'email', 'orders', 'highestOrder'
     ];
 
     public function orders() {
@@ -35,7 +34,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             $subQuery
                 ->select('users.id')
                 ->from('users')
-                ->join('products', function() {})
+                ->crossJoin('products')
                 ->leftJoin('orders', function($join) {
                     $join
                         ->on('orders.user_id', '=', 'users.id')

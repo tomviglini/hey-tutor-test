@@ -8,8 +8,7 @@ class UserController
 {
     public function index()
     {
-        // $users = User::purchasedAllProducts()->with('orders.product')->get();
-        $users = User::highestTotalSales()->with('orders.product')->first();
+        $users = User::purchasedAllProducts()->with('orders.product')->get();
         return $users;
     }
 }
